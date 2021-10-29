@@ -5,6 +5,7 @@ import actors.Player;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
+import flixel.util.FlxSort;
 
 class PlayState extends FlxState
 {
@@ -20,7 +21,7 @@ class PlayState extends FlxState
 		add(actors);
 
 		var player:Player = new Player(100, 100);
-		registerActor(player, 1);
+		registerActor(player, 3);
 	}
 
 	override public function update(elapsed:Float)
@@ -78,8 +79,13 @@ class PlayState extends FlxState
 
 	private function tick()
 	{
+		// TODO: sort actors
+
+		// check actions
 		actors.forEach(function(actor:Actor)
 		{
+			// Every tick the actor gains energy for their action.
+			actor.energy++;
 			switch (Type.getClassName(Type.getClass(actor)).split('.')[1])
 			{
 				case "Player":
@@ -89,13 +95,29 @@ class PlayState extends FlxState
 					{
 						case Action.Wait:
 						case Action.Move_Left:
-							actor.x -= TILE_SIZE;
+							if (actor.energy > 0)
+							{
+								actor.x -= TILE_SIZE;
+								actor.energy--;
+							}
 						case Action.Move_Right:
-							actor.x += TILE_SIZE;
+							if (actor.energy > 0)
+							{
+								actor.x += TILE_SIZE;
+								actor.energy--;
+							}
 						case Action.Move_Up:
-							actor.y -= TILE_SIZE;
+							if (actor.energy > 0)
+							{
+								actor.y -= TILE_SIZE;
+								actor.energy--;
+							}
 						case Action.Move_Down:
-							actor.y += TILE_SIZE;
+							if (actor.energy > 0)
+							{
+								actor.y += TILE_SIZE;
+								actor.energy--;
+							}
 					}
 				default:
 			}

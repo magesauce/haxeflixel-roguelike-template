@@ -11,11 +11,21 @@ enum Action
 	Move_Down;
 }
 
+enum Type
+{
+	Normal;
+	Magic;
+	Fire;
+	Ice;
+	Undead;
+}
+
 class Actor extends FlxSprite
 {
+	public var energy:Int = 0;
 	public var speed:Int = 0;
-
 	public var action:Action;
+	public var type:Type;
 
 	override public function new(X:Float, Y:Float)
 	{
