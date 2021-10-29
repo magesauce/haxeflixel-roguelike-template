@@ -1,12 +1,15 @@
 package states;
 
 import actors.Actor;
+import actors.Player;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
 
 class PlayState extends FlxState
 {
+	inline static var TILE_SIZE:Int = 16;
+
 	var actors:FlxTypedGroup<Actor>;
 
 	override public function create()
@@ -14,6 +17,10 @@ class PlayState extends FlxState
 		super.create();
 
 		actors = new FlxTypedGroup<Actor>();
+		add(actors);
+
+		var player:Player = new Player(100, 100);
+		registerActor(player, 1);
 	}
 
 	override public function update(elapsed:Float)
@@ -22,21 +29,38 @@ class PlayState extends FlxState
 
 		if (FlxG.keys.justPressed.LEFT)
 		{
+			actors.forEachOfType(Player, function(player:Player)
+			{
+				player.action = Action.Move_Left;
+			});
 			tick();
 		}
 
 		if (FlxG.keys.justPressed.RIGHT)
 		{
+			actors.forEachOfType(Player, function(player:Player)
+			{
+				player.action = Action.Move_Right;
+			});
+
 			tick();
 		}
 
 		if (FlxG.keys.justPressed.UP)
 		{
+			actors.forEachOfType(Player, function(player:Player)
+			{
+				player.action = Action.Move_Up;
+			});
 			tick();
 		}
 
 		if (FlxG.keys.justPressed.DOWN)
 		{
+			actors.forEachOfType(Player, function(player:Player)
+			{
+				player.action = Action.Move_Down;
+			});
 			tick();
 		}
 	}
@@ -56,7 +80,25 @@ class PlayState extends FlxState
 	{
 		actors.forEach(function(actor:Actor)
 		{
-			trace(actor.speed);
+			switch (Type.getClassName(Type.getClass(actor)).split('.')[1])
+			{
+				case "Player":
+					if (actor.action == Action.Move_Left) {}
+
+					switch (actor.action)
+					{
+						case Action.Wait:
+						case Action.Move_Left:
+							actor.x -= TILE_SIZE;
+						case Action.Move_Right:
+							actor.x += TILE_SIZE;
+						case Action.Move_Up:
+							actor.y -= TILE_SIZE;
+						case Action.Move_Down:
+							actor.y += TILE_SIZE;
+					}
+				default:
+			}
 		});
 	}
 }
