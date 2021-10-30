@@ -1,4 +1,4 @@
-package components;
+package ecs.components;
 
 class Input implements Component
 {

@@ -1,6 +1,6 @@
-package entities;
+package ecs.entities;
 
-import components.Component;
+import ecs.components.Component;
 
 enum Action
 {

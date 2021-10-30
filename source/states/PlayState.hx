@@ -1,7 +1,7 @@
 package states;
 
 import System;
-import components.Component;
+import ecs.components.Component;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -25,22 +25,22 @@ class PlayState extends FlxState
 		add(sys.sprites);
 
 		var components:List<Component> = new List<Component>();
-		components.add(new components.Render(new FlxSprite(0, 0).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.PURPLE)));
-		components.add(new components.Position(0, 0));
-		components.add(new components.Harmable(3));
-		components.add(new components.Input());
+		components.add(new ecs.components.Render(new FlxSprite(0, 0).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.PURPLE)));
+		components.add(new ecs.components.Position(0, 0));
+		components.add(new ecs.components.Harmable(3));
+		components.add(new ecs.components.Input());
 		sys.create("player", components).addTag("creature");
 
 		var components:List<Component> = new List<Component>();
-		components.add(new components.Render(new FlxSprite(16, 0).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.RED)));
-		components.add(new components.Position(1, 0));
-		components.add(new components.Harmable(3));
+		components.add(new ecs.components.Render(new FlxSprite(16, 0).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.RED)));
+		components.add(new ecs.components.Position(1, 0));
+		components.add(new ecs.components.Harmable(3));
 		sys.create("enemy", components).addTag("creature");
 
 		var components:List<Component> = new List<Component>();
-		components.add(new components.Render(new FlxSprite(48, 32).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.RED)));
-		components.add(new components.Position(3, 2));
-		components.add(new components.Harmable(3));
+		components.add(new ecs.components.Render(new FlxSprite(48, 32).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.RED)));
+		components.add(new ecs.components.Position(3, 2));
+		components.add(new ecs.components.Harmable(3));
 		sys.create("enemy", components).addTag("creature");
 
 		tick();

@@ -1,12 +1,9 @@
 package;
 
-import components.Component;
-import components.Render;
-import entities.Entity;
+import ecs.components.Component;
+import ecs.entities.Entity;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
-import flixel.util.FlxColor;
-import flixel.util.FlxSort;
 
 class System
 {

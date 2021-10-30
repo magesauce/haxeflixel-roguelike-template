@@ -1,4 +1,4 @@
-package components;
+package ecs.components;
 
 import flixel.FlxSprite;
 import openfl.display.Sprite;
