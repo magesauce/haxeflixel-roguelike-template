@@ -29,15 +29,13 @@ class PlayState extends FlxState
 		add(sys.sprites);
 
 		var components:List<Component> = new List<Component>();
-		components.add(new ecs.components.Render(new FlxSprite(0, 0).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.PURPLE)));
-		components.add(new ecs.components.Position(0, 0));
+		components.add(new ecs.components.Render(new FlxSprite(480, 60).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.PURPLE)));
 		components.add(new ecs.components.Harmable(3));
 		components.add(new ecs.components.Input());
 		sys.create("player", components).addTag("creature");
 
 		var components:List<Component> = new List<Component>();
-		components.add(new ecs.components.Render(new FlxSprite(96, 64).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.RED)));
-		components.add(new ecs.components.Position(3, 2));
+		components.add(new ecs.components.Render(new FlxSprite(544, 156).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.RED)));
 		components.add(new ecs.components.Harmable(3));
 		sys.create("enemy", components).addTag("creature");
 	}

@@ -32,7 +32,7 @@ class ApplicationMain
 
 		ManifestResources.init(config);
 
-		app.meta["build"] = "11";
+		app.meta["build"] = "12";
 		app.meta["company"] = "HaxeFlixel";
 		app.meta["file"] = "haxeflixel-roguelike-template";
 		app.meta["name"] = "haxeflixel-roguelike-template";

@@ -60,20 +60,16 @@ class Entity
 			case NONE:
 				cost = 0;
 			case MOVE_RIGHT:
-				component("Position").position.x += 1;
-				component("Render").sprite.x += PlayState.TILE_SIZE;
+				component("Render").place(component("Render").position.x + 1, component("Render").position.y);
 				cost = 100;
 			case MOVE_LEFT:
-				component("Position").position.x -= 1;
-				component("Render").sprite.x -= PlayState.TILE_SIZE;
+				component("Render").place(component("Render").position.x - 1, component("Render").position.y);
 				cost = 100;
 			case MOVE_UP:
-				component("Position").position.y -= 1;
-				component("Render").sprite.y -= PlayState.TILE_SIZE;
+				component("Render").place(component("Render").position.x, component("Render").position.y - 1);
 				cost = 100;
 			case MOVE_DOWN:
-				component("Position").position.y += 1;
-				component("Render").sprite.y += PlayState.TILE_SIZE;
+				component("Render").place(component("Render").position.x, component("Render").position.y + 1);
 				cost = 100;
 		}
 
