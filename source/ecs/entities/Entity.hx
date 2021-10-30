@@ -1,10 +1,15 @@
 package ecs.entities;
 
 import ecs.components.Component;
+import states.PlayState;
 
 enum Action
 {
-	MOVE;
+	NONE;
+	MOVE_RIGHT;
+	MOVE_LEFT;
+	MOVE_UP;
+	MOVE_DOWN;
 }
 
 class Entity
@@ -16,10 +21,13 @@ class Entity
 	public var speed:Int = 0;
 	public var energy:Int = 0;
 
+	public var action:Action;
+
 	public function new()
 	{
 		components = new Array<Component>();
 		tags = new List<String>();
+		action = Action.NONE;
 	}
 
 	public function addComponent(component:Component)
@@ -46,6 +54,30 @@ class Entity
 
 	public function takeTurn():Int
 	{
-		return 0;
+		var cost:Int = 0;
+		switch (action)
+		{
+			case NONE:
+				cost = 0;
+			case MOVE_RIGHT:
+				component("Position").position.x += 1;
+				component("Render").sprite.x += PlayState.TILE_SIZE;
+				cost = 100;
+			case MOVE_LEFT:
+				component("Position").position.x -= 1;
+				component("Render").sprite.x -= PlayState.TILE_SIZE;
+				cost = 100;
+			case MOVE_UP:
+				component("Position").position.y -= 1;
+				component("Render").sprite.y -= PlayState.TILE_SIZE;
+				cost = 100;
+			case MOVE_DOWN:
+				component("Position").position.y += 1;
+				component("Render").sprite.y += PlayState.TILE_SIZE;
+				cost = 100;
+		}
+
+		action = Action.NONE;
+		return cost;
 	}
 }

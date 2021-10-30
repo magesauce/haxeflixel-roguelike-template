@@ -1,35 +1,38 @@
 package ecs.components;
 
+import flixel.math.FlxPoint;
+
 class Position implements Component
 {
 	public var name:String = "Position";
 
-	public var x:Int = 0;
-	public var y:Int = 0;
+	public var position:FlxPoint;
 
 	public function new(X:Int, Y:Int)
 	{
-		x = X;
-		y = Y;
+		position = new FlxPoint();
+
+		position.x = X;
+		position.y = Y;
 	}
 
 	public function moveLeft()
 	{
-		x--;
+		position.x--;
 	}
 
 	public function moveRight()
 	{
-		x++;
+		position.x++;
 	}
 
 	public function moveUp()
 	{
-		y--;
+		position.y--;
 	}
 
 	public function moveDown()
 	{
-		y++;
+		position.y++;
 	}
 }

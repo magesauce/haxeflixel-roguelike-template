@@ -19,7 +19,7 @@ class ApplicationMain
 
 		#if (js && html5)
 		#if (munit || utest)
-		lime.system.System.embed("haxeflixel-roguelike-template", null, 400, 240);
+		lime.system.System.embed("haxeflixel-roguelike-template", null, 1920, 1080);
 		#end
 		#else
 		create(null);
@@ -32,7 +32,7 @@ class ApplicationMain
 
 		ManifestResources.init(config);
 
-		app.meta["build"] = "10";
+		app.meta["build"] = "11";
 		app.meta["company"] = "HaxeFlixel";
 		app.meta["file"] = "haxeflixel-roguelike-template";
 		app.meta["name"] = "haxeflixel-roguelike-template";
@@ -51,14 +51,14 @@ class ApplicationMain
 			element: null,
 			frameRate: 60,
 			#if !web fullscreen: false, #end
-			height: 240,
+			height: 1080,
 			hidden: #if munit true #else false #end,
 			maximized: false,
 			minimized: false,
 			parameters: {},
 			resizable: true,
 			title: "haxeflixel-roguelike-template",
-			width: 400,
+			width: 1920,
 			x: null,
 			y: null,
 		};

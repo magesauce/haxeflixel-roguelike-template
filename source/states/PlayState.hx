@@ -2,24 +2,28 @@ package states;
 
 import ecs.System;
 import ecs.components.Component;
+import ecs.entities.Entity;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
-import flixel.group.FlxGroup;
 import flixel.util.FlxColor;
-import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
-import sys.thread.Deque;
 
 class PlayState extends FlxState
 {
-	inline static var TILE_SIZE:Int = 16;
+	public inline static var TILE_SIZE:Int = 32;
 
 	var sys:System;
+
+	var playerTurn:Bool = true;
 
 	override public function create()
 	{
 		super.create();
+
+		var bg:FlxSprite = new FlxSprite(0, 0);
+		bg.loadGraphic(AssetPaths.bg__png);
+		add(bg);
 
 		sys = new System();
 		add(sys.sprites);
@@ -32,23 +36,46 @@ class PlayState extends FlxState
 		sys.create("player", components).addTag("creature");
 
 		var components:List<Component> = new List<Component>();
-		components.add(new ecs.components.Render(new FlxSprite(16, 0).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.RED)));
-		components.add(new ecs.components.Position(1, 0));
-		components.add(new ecs.components.Harmable(3));
-		sys.create("enemy", components).addTag("creature");
-
-		var components:List<Component> = new List<Component>();
-		components.add(new ecs.components.Render(new FlxSprite(48, 32).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.RED)));
+		components.add(new ecs.components.Render(new FlxSprite(96, 64).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.RED)));
 		components.add(new ecs.components.Position(3, 2));
 		components.add(new ecs.components.Harmable(3));
 		sys.create("enemy", components).addTag("creature");
-
-		tick();
 	}
 
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
+
+		if (playerTurn)
+		{
+			if (FlxG.keys.justPressed.RIGHT)
+			{
+				var player:Entity = sys.firstEntityNamed("player");
+				player.action = Action.MOVE_RIGHT;
+				tick();
+			}
+
+			if (FlxG.keys.justPressed.LEFT)
+			{
+				var player:Entity = sys.firstEntityNamed("player");
+				player.action = Action.MOVE_LEFT;
+				tick();
+			}
+
+			if (FlxG.keys.justPressed.UP)
+			{
+				var player:Entity = sys.firstEntityNamed("player");
+				player.action = Action.MOVE_UP;
+				tick();
+			}
+
+			if (FlxG.keys.justPressed.DOWN)
+			{
+				var player:Entity = sys.firstEntityNamed("player");
+				player.action = Action.MOVE_DOWN;
+				tick();
+			}
+		}
 	}
 
 	private function tick()
@@ -59,17 +86,32 @@ class PlayState extends FlxState
 			entity.energy += 100;
 			trace("Increased energy of " + entity.name + " by 100. New energy level: " + entity.energy);
 
+			// If enough energy
 			if (entity.energy > 0)
 			{
-				// Check for input from player
-				if (entity.component("Input") != null) {}
-
-				// Insert entity into list where it belongs
-				sys.sortEntities();
+				if (!playerTurn)
+				{
+					if (entity.name == "player")
+					{
+						playerTurn = true;
+						return;
+					}
+					else
+					{
+						// Anyone else
+						sys.sortEntities();
+						new FlxTimer().start(.025, progressTime, 1);
+					}
+				}
+				else
+				{
+					entity.energy -= entity.takeTurn();
+					playerTurn = false;
+					sys.sortEntities();
+					new FlxTimer().start(.025, progressTime, 1);
+				}
 			}
 		}
-
-		new FlxTimer().start(2.0, progressTime, 1);
 	}
 
 	private function progressTime(t:FlxTimer)
