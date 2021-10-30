@@ -1,6 +1,7 @@
 package ecs.components;
 
 import flixel.FlxSprite;
+import flixel.animation.FlxAnimation;
 import flixel.math.FlxPoint;
 import openfl.display.Sprite;
 import states.PlayState;
@@ -15,6 +16,9 @@ class Render implements Component
 	public function new(sprite:FlxSprite)
 	{
 		this.sprite = sprite;
+
+		sprite.animation.add("bounce", [0, 1], 2, true);
+		sprite.animation.play("bounce");
 
 		position = new FlxPoint();
 

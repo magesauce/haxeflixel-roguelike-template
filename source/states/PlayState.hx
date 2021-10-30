@@ -15,8 +15,6 @@ class PlayState extends FlxState
 
 	var sys:System;
 
-	var playerTurn:Bool = true;
-
 	override public function create()
 	{
 		super.create();
@@ -35,85 +33,66 @@ class PlayState extends FlxState
 		sys.create("player", components).addTag("creature");
 
 		var components:List<Component> = new List<Component>();
-		components.add(new ecs.components.Render(new FlxSprite(544, 156).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.RED)));
+		components.add(new ecs.components.Render(new FlxSprite(544, 156).loadGraphic(AssetPaths.cultist__png, true, TILE_SIZE, TILE_SIZE)));
 		components.add(new ecs.components.Harmable(3));
-		sys.create("enemy", components).addTag("creature");
+		sys.create("fanatic", components).addTag("creature");
+
+		var components:List<Component> = new List<Component>();
+		components.add(new ecs.components.Render(new FlxSprite(864, 476).loadGraphic(AssetPaths.ghost__png, true, TILE_SIZE, TILE_SIZE)));
+		components.add(new ecs.components.Harmable(3));
+		sys.create("ghost", components).addTag("creature");
 	}
 
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
-		if (playerTurn)
+		if (FlxG.keys.justPressed.RIGHT)
 		{
-			if (FlxG.keys.justPressed.RIGHT)
-			{
-				var player:Entity = sys.firstEntityNamed("player");
-				player.action = Action.MOVE_RIGHT;
-				tick();
-			}
-
-			if (FlxG.keys.justPressed.LEFT)
-			{
-				var player:Entity = sys.firstEntityNamed("player");
-				player.action = Action.MOVE_LEFT;
-				tick();
-			}
-
-			if (FlxG.keys.justPressed.UP)
-			{
-				var player:Entity = sys.firstEntityNamed("player");
-				player.action = Action.MOVE_UP;
-				tick();
-			}
-
-			if (FlxG.keys.justPressed.DOWN)
-			{
-				var player:Entity = sys.firstEntityNamed("player");
-				player.action = Action.MOVE_DOWN;
-				tick();
-			}
+			var player:Entity = sys.firstEntityNamed("player");
+			player.action = Action.MOVE_RIGHT;
 		}
+
+		if (FlxG.keys.justPressed.LEFT)
+		{
+			var player:Entity = sys.firstEntityNamed("player");
+			player.action = Action.MOVE_LEFT;
+		}
+
+		if (FlxG.keys.justPressed.UP)
+		{
+			var player:Entity = sys.firstEntityNamed("player");
+			player.action = Action.MOVE_UP;
+		}
+
+		if (FlxG.keys.justPressed.DOWN)
+		{
+			var player:Entity = sys.firstEntityNamed("player");
+			player.action = Action.MOVE_DOWN;
+		}
+
+		tick();
 	}
 
 	private function tick()
 	{
 		if (sys.entities.length > 0)
 		{
+			// Grab the first entity on the stack
 			var entity = sys.entities[0];
+
+			// If the player has not chosen an action, then we must wait until they do before proceeding
+			if (entity.name == "player" && entity.action == Action.NONE)
+				return;
+
 			entity.energy += 100;
 			trace("Increased energy of " + entity.name + " by 100. New energy level: " + entity.energy);
-
 			// If enough energy
 			if (entity.energy > 0)
 			{
-				if (!playerTurn)
-				{
-					if (entity.name == "player")
-					{
-						playerTurn = true;
-						return;
-					}
-					else
-					{
-						// Anyone else
-						sys.sortEntities();
-						new FlxTimer().start(.025, progressTime, 1);
-					}
-				}
-				else
-				{
-					entity.energy -= entity.takeTurn();
-					playerTurn = false;
-					sys.sortEntities();
-					new FlxTimer().start(.025, progressTime, 1);
-				}
+				entity.energy -= entity.takeTurn();
+				sys.sortEntities();
 			}
 		}
-	}
-
-	private function progressTime(t:FlxTimer)
-	{
-		tick();
 	}
 }

@@ -1,11 +1,12 @@
 package ecs.entities;
 
 import ecs.components.Component;
-import states.PlayState;
+import flixel.FlxG;
 
 enum Action
 {
 	NONE;
+	WAIT;
 	MOVE_RIGHT;
 	MOVE_LEFT;
 	MOVE_UP;
@@ -58,18 +59,36 @@ class Entity
 		switch (action)
 		{
 			case NONE:
+				cost = -1;
+			case WAIT:
 				cost = 0;
 			case MOVE_RIGHT:
 				component("Render").place(component("Render").position.x + 1, component("Render").position.y);
+				if (name == "player")
+				{
+					FlxG.sound.play(AssetPaths.player_move__wav);
+				}
 				cost = 100;
 			case MOVE_LEFT:
 				component("Render").place(component("Render").position.x - 1, component("Render").position.y);
+				if (name == "player")
+				{
+					FlxG.sound.play(AssetPaths.player_move__wav);
+				}
 				cost = 100;
 			case MOVE_UP:
 				component("Render").place(component("Render").position.x, component("Render").position.y - 1);
+				if (name == "player")
+				{
+					FlxG.sound.play(AssetPaths.player_move__wav);
+				}
 				cost = 100;
 			case MOVE_DOWN:
 				component("Render").place(component("Render").position.x, component("Render").position.y + 1);
+				if (name == "player")
+				{
+					FlxG.sound.play(AssetPaths.player_move__wav);
+				}
 				cost = 100;
 		}
 
