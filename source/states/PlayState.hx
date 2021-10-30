@@ -1,126 +1,79 @@
 package states;
 
-import actors.Actor;
-import actors.Player;
+import System;
+import components.Component;
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
+import flixel.util.FlxColor;
 import flixel.util.FlxSort;
+import flixel.util.FlxTimer;
+import sys.thread.Deque;
 
 class PlayState extends FlxState
 {
 	inline static var TILE_SIZE:Int = 16;
 
-	var actors:FlxTypedGroup<Actor>;
+	var sys:System;
 
 	override public function create()
 	{
 		super.create();
 
-		actors = new FlxTypedGroup<Actor>();
-		add(actors);
+		sys = new System();
+		add(sys.sprites);
 
-		var player:Player = new Player(100, 100);
-		registerActor(player, 3);
+		var components:List<Component> = new List<Component>();
+		components.add(new components.Render(new FlxSprite(0, 0).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.PURPLE)));
+		components.add(new components.Position(0, 0));
+		components.add(new components.Harmable(3));
+		components.add(new components.Input());
+		sys.create("player", components).addTag("creature");
+
+		var components:List<Component> = new List<Component>();
+		components.add(new components.Render(new FlxSprite(16, 0).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.RED)));
+		components.add(new components.Position(1, 0));
+		components.add(new components.Harmable(3));
+		sys.create("enemy", components).addTag("creature");
+
+		var components:List<Component> = new List<Component>();
+		components.add(new components.Render(new FlxSprite(48, 32).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.RED)));
+		components.add(new components.Position(3, 2));
+		components.add(new components.Harmable(3));
+		sys.create("enemy", components).addTag("creature");
+
+		tick();
 	}
 
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
-
-		if (FlxG.keys.justPressed.LEFT)
-		{
-			actors.forEachOfType(Player, function(player:Player)
-			{
-				player.action = Action.Move_Left;
-			});
-			tick();
-		}
-
-		if (FlxG.keys.justPressed.RIGHT)
-		{
-			actors.forEachOfType(Player, function(player:Player)
-			{
-				player.action = Action.Move_Right;
-			});
-
-			tick();
-		}
-
-		if (FlxG.keys.justPressed.UP)
-		{
-			actors.forEachOfType(Player, function(player:Player)
-			{
-				player.action = Action.Move_Up;
-			});
-			tick();
-		}
-
-		if (FlxG.keys.justPressed.DOWN)
-		{
-			actors.forEachOfType(Player, function(player:Player)
-			{
-				player.action = Action.Move_Down;
-			});
-			tick();
-		}
-	}
-
-	private function registerActor(actor:Actor, speed:Int)
-	{
-		actor.speed = speed;
-		actors.add(actor);
-	}
-
-	private function releaseActor(actor:Actor)
-	{
-		actors.remove(actor);
 	}
 
 	private function tick()
 	{
-		// TODO: sort actors
-
-		// check actions
-		actors.forEach(function(actor:Actor)
+		if (sys.entities.length > 0)
 		{
-			// Every tick the actor gains energy for their action.
-			actor.energy++;
-			switch (Type.getClassName(Type.getClass(actor)).split('.')[1])
-			{
-				case "Player":
-					if (actor.action == Action.Move_Left) {}
+			var entity = sys.entities[0];
+			entity.energy += 100;
+			trace("Increased energy of " + entity.name + " by 100. New energy level: " + entity.energy);
 
-					switch (actor.action)
-					{
-						case Action.Wait:
-						case Action.Move_Left:
-							if (actor.energy > 0)
-							{
-								actor.x -= TILE_SIZE;
-								actor.energy--;
-							}
-						case Action.Move_Right:
-							if (actor.energy > 0)
-							{
-								actor.x += TILE_SIZE;
-								actor.energy--;
-							}
-						case Action.Move_Up:
-							if (actor.energy > 0)
-							{
-								actor.y -= TILE_SIZE;
-								actor.energy--;
-							}
-						case Action.Move_Down:
-							if (actor.energy > 0)
-							{
-								actor.y += TILE_SIZE;
-								actor.energy--;
-							}
-					}
-				default:
+			if (entity.energy > 0)
+			{
+				// Check for input from player
+				if (entity.component("Input") != null) {}
+
+				// Insert entity into list where it belongs
+				sys.sortEntities();
 			}
-		});
+		}
+
+		new FlxTimer().start(2.0, progressTime, 1);
+	}
+
+	private function progressTime(t:FlxTimer)
+	{
+		tick();
 	}
 }
