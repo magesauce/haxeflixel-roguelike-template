@@ -1,4 +1,4 @@
-package;
+package ecs;
 
 import ecs.components.Component;
 import ecs.entities.Entity;

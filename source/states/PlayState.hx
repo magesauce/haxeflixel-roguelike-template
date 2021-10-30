@@ -1,6 +1,6 @@
 package states;
 
-import System;
+import ecs.System;
 import ecs.components.Component;
 import flixel.FlxG;
 import flixel.FlxSprite;
