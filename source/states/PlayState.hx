@@ -12,6 +12,7 @@ import flixel.util.FlxTimer;
 class PlayState extends FlxState
 {
 	public inline static var TILE_SIZE:Int = 32;
+	public inline static var BOARD_SIZE:Int = 30;
 
 	var sys:System;
 
@@ -27,18 +28,18 @@ class PlayState extends FlxState
 		add(sys.sprites);
 
 		var components:List<Component> = new List<Component>();
-		components.add(new ecs.components.Render(new FlxSprite(480, 60).makeGraphic(TILE_SIZE, TILE_SIZE, FlxColor.PURPLE)));
+		components.add(new ecs.components.Render(0, 0));
 		components.add(new ecs.components.Harmable(3));
 		components.add(new ecs.components.Input());
 		sys.create("player", components).addTag("creature");
 
 		var components:List<Component> = new List<Component>();
-		components.add(new ecs.components.Render(new FlxSprite(544, 156).loadGraphic(AssetPaths.cultist__png, true, TILE_SIZE, TILE_SIZE)));
+		components.add(new ecs.components.Render(2, 2));
 		components.add(new ecs.components.Harmable(3));
 		sys.create("fanatic", components).addTag("creature");
 
 		var components:List<Component> = new List<Component>();
-		components.add(new ecs.components.Render(new FlxSprite(864, 476).loadGraphic(AssetPaths.ghost__png, true, TILE_SIZE, TILE_SIZE)));
+		components.add(new ecs.components.Render(5, 10));
 		components.add(new ecs.components.Harmable(3));
 		sys.create("ghost", components).addTag("creature");
 	}

@@ -2,6 +2,7 @@ package ecs.entities;
 
 import ecs.components.Component;
 import flixel.FlxG;
+import states.PlayState;
 
 enum Action
 {
@@ -63,33 +64,54 @@ class Entity
 			case WAIT:
 				cost = 0;
 			case MOVE_RIGHT:
-				component("Render").place(component("Render").position.x + 1, component("Render").position.y);
-				if (name == "player")
+				if (component("Render").position.x + 1 < PlayState.BOARD_SIZE)
 				{
-					FlxG.sound.play(AssetPaths.player_move__wav);
+					component("Render").place(component("Render").position.x + 1, component("Render").position.y);
+					if (name == "player")
+					{
+						FlxG.sound.play(AssetPaths.player_move__wav);
+					}
+					cost = 100;
 				}
-				cost = 100;
+				else
+					cost = 0;
 			case MOVE_LEFT:
-				component("Render").place(component("Render").position.x - 1, component("Render").position.y);
-				if (name == "player")
+				if (component("Render").position.x - 1 >= 0)
 				{
-					FlxG.sound.play(AssetPaths.player_move__wav);
+					component("Render").place(component("Render").position.x - 1, component("Render").position.y);
+					if (name == "player")
+					{
+						FlxG.sound.play(AssetPaths.player_move__wav);
+					}
+					cost = 100;
 				}
-				cost = 100;
+				else
+					cost = 0;
+
 			case MOVE_UP:
-				component("Render").place(component("Render").position.x, component("Render").position.y - 1);
-				if (name == "player")
+				if (component("Render").position.y - 1 >= 0)
 				{
-					FlxG.sound.play(AssetPaths.player_move__wav);
+					component("Render").place(component("Render").position.x, component("Render").position.y - 1);
+					if (name == "player")
+					{
+						FlxG.sound.play(AssetPaths.player_move__wav);
+					}
+					cost = 100;
 				}
-				cost = 100;
+				else
+					cost = 0;
 			case MOVE_DOWN:
-				component("Render").place(component("Render").position.x, component("Render").position.y + 1);
-				if (name == "player")
+				if (component("Render").position.y + 1 < PlayState.BOARD_SIZE)
 				{
-					FlxG.sound.play(AssetPaths.player_move__wav);
+					component("Render").place(component("Render").position.x, component("Render").position.y + 1);
+					if (name == "player")
+					{
+						FlxG.sound.play(AssetPaths.player_move__wav);
+					}
+					cost = 100;
 				}
-				cost = 100;
+				else
+					cost = 0;
 		}
 
 		action = Action.NONE;

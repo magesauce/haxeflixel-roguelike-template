@@ -39,14 +39,15 @@ class System
 			entity.components.push(component);
 		}
 
-		// Add entities to all entities list
-		entities.push(entity);
-
 		// If the entity has a render component, then add the sprite to the group
 		if (entity.component("Render") != null)
 		{
+			entity.component("Render").setSprite(name);
 			sprites.add(entity.component("Render").sprite);
 		}
+
+		// Add entities to all entities list
+		entities.push(entity);
 
 		return entity;
 	}
