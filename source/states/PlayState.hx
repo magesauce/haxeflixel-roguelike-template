@@ -48,25 +48,25 @@ class PlayState extends FlxState
 	{
 		super.update(elapsed);
 
-		if (FlxG.keys.justPressed.RIGHT)
+		if (FlxG.keys.anyJustPressed([D, RIGHT]))
 		{
 			var player:Entity = sys.firstEntityNamed("player");
 			player.action = Action.MOVE_RIGHT;
 		}
 
-		if (FlxG.keys.justPressed.LEFT)
+		if (FlxG.keys.anyJustPressed([A, LEFT]))
 		{
 			var player:Entity = sys.firstEntityNamed("player");
 			player.action = Action.MOVE_LEFT;
 		}
 
-		if (FlxG.keys.justPressed.UP)
+		if (FlxG.keys.anyJustPressed([W, UP]))
 		{
 			var player:Entity = sys.firstEntityNamed("player");
 			player.action = Action.MOVE_UP;
 		}
 
-		if (FlxG.keys.justPressed.DOWN)
+		if (FlxG.keys.anyJustPressed([S, DOWN]))
 		{
 			var player:Entity = sys.firstEntityNamed("player");
 			player.action = Action.MOVE_DOWN;
